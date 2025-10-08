@@ -174,8 +174,8 @@ if st.button("Start Processing"):
             for i,(lx1,ly1,lx2,ly2) in enumerate(lanes):
                 if lx1<=cx<=lx2 and ly1<=cy<=ly2:
                     lane_counts[i]+=1
-            cv2.rectangle(frame,(x1,y1),(x2,y2),(255,150,0),2)
-            cv2.putText(frame,f"ID {tid}",(x1,y1-8),cv2.FONT_HERSHEY_SIMPLEX,0.5,(255,255,0),1)
+            cv2.rectangle(frame,(x1,y1),(x2,y2),(255,0,0),2)
+            cv2.putText(frame,f"ID {tid}",(x1,y1-8),cv2.FONT_HERSHEY_SIMPLEX,0.5,(255,0,0),1)
 
         dominant_idx = np.argmax(lane_counts) if lanes else -1
         for i,(lx1,ly1,lx2,ly2) in enumerate(lanes):
