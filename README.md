@@ -1,52 +1,104 @@
-# 🚦 Smart Traffic Signals: Adaptive Signal Timing Based on Vehicle Density
+# 🚦 Smart Traffic Signals: Vehicle Density Estimation & Dynamic Timing  
 
-This project implements a real-time traffic signal control system that adjusts signal timing based on the number of vehicles detected in each lane. Utilizing YOLOv8 for vehicle detection and OpenCV for image processing, the system dynamically allocates green signal durations to optimize traffic flow.
+**Assigned to:** Group 4  
+**Institute:** Birla Institute of Technology, Mesra  
+
+
+👨‍💻 Contributors
+BTECH/10370/24	Sarthak Gaware
+BTECH/10383/24	Aman Kumar
+BTECH/10046/24	Satyam Verma
+BTECH/10357/24	Suraj Kumar Singh
+BTECH/10449/24	Aman Rathod
 
 ---
 
-## 🧠 Features
-
-- **Real-Time Vehicle Detection**: Uses YOLOv8 for accurate vehicle detection in video streams.
-- **Lane-wise Vehicle Counting**: Counts vehicles per lane to assess traffic density.
-- **Adaptive Signal Timing**: Adjusts green signal durations based on lane density.
-- **Streamlit Dashboard**: Provides a user-friendly interface for real-time monitoring and control.
-- **Robustness Testing**: Simulates dark and rainy conditions to evaluate system performance.
+## 🎯 Objective  
+The project aims to **estimate real-time vehicle density** from a camera feed or recorded traffic video and **dynamically adjust traffic signal durations**.  
+This helps **reduce average waiting time**, improve traffic throughput, and demonstrate an **AI-based traffic management system**.
 
 ---
 
-## 📥 Installation
+## ⚙️ How It Works  
 
-1. **Clone the repository**:
+1. **Video Input:**  
+   Accepts either a **live webcam feed** or **uploaded traffic video**.  
 
-   ```bash
-   git clone https://github.com/aman-verse/Smart_Traffic_Signals.git
-   cd Smart_Traffic_Signals
+2. **Vehicle Detection:**  
+   Vehicles (cars, buses, trucks, bikes) are detected using **YOLOv8**, a real-time object detection model.  
 
-2. **Set up a virtual environment (optional but recommended):**
-    python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+3. **Lane Definition:**  
+   Users define **Regions of Interest (ROIs)** corresponding to traffic lanes for accurate counting.  
 
-3. **Install dependencies:**
+4. **Counting & Density Estimation:**  
+   Vehicles are counted per lane in each frame to estimate **lane-wise traffic density**.  
+
+5. **Rule-Based Signal Logic:**  
+   Green signal duration is adjusted proportionally to lane density — **higher density = longer green time**.  
+
+6. **Dashboard Visualization:**  
+   A **Streamlit dashboard** shows:  
+   - Live video with vehicle bounding boxes  
+   - Lane-wise vehicle counts  
+   - Adaptive signal timing  
+   - Performance metrics (FPS, inference time)
+
+---
+
+## 🧩 Methodology  
+
+1. **Data Acquisition:**  
+   - Video input from **webcam** or pre-recorded traffic footage.  
+   - Optional ground-truth CSV to evaluate counting accuracy.
+
+2. **Preprocessing:**  
+   - Define **lane ROIs** manually or load from saved configuration.  
+   - Optional simulation of **low-light or rain** conditions for robustness testing.
+
+3. **Vehicle Detection:**  
+   - YOLOv5 model detects vehicles in each frame.  
+   - Only relevant vehicle classes (car, bus, truck, motorbike) are counted.  
+
+4. **Vehicle Tracking (Optional):**  
+   - SORT tracker can be used to maintain unique IDs across frames.  
+
+5. **Lane-Wise Counting & Density Calculation:**  
+   - Centroid of each detected vehicle is checked against lane ROIs.  
+   - Counts per lane are used for traffic density estimation.
+
+6. **Adaptive Signal Timing:**  
+   - Lane green time is **proportional to vehicle density** within limits defined in the dashboard.  
+   - Average green time is calculated dynamically for each frame.
+
+7. **Visualization & Metrics:**  
+   - Streamlit displays live video, lane counts, adaptive green times, and FPS metrics.  
+   - Ground-truth comparison provides **MAE and MAPE** for evaluation.
+
+---
+
+## 🧠 Model Used  
+
+| **Component** | **Model / Method** | **Purpose** |
+|----------------|--------------------|--------------|
+| Vehicle Detection | **YOLOv5** | Real-time detection of cars, buses, trucks, bikes |
+| Control Logic | **Rule-Based** | Adaptive signal timing based on lane density |
+| Interface | **Streamlit** | Live dashboard for visualization and monitoring |
+
+---
+
+## 🧩 Setup Instructions  
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/aman-verse/Smart_Traffic_Signals.git
+cd Smart_Traffic_Signals
+
+2. Install dependencies
     pip install -r requirements.txt
 
-4. 🚀** Usage**
-
-Run the Streamlit app:
-    
+3. Run the dashboard
     streamlit run app.py
 
-
-.
-**# 
-📂 Project Structure**
-
-Smart_Traffic_Signals/
-│
-├── app.py                 # Main Streamlit application
-├── requirements.txt       # Python dependencies
-├── data/                  # Lane ROI configurations
-├── models/                # YOLOv8 model weights
-│   ├── yolov8n.pt
-├── README.md              # Project documentation
-
-
+4. Choose input
+    Upload traffic video (.mp4, .avi, .mov)
+    or Use webcam feed for live detection
