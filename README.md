@@ -7,9 +7,10 @@
 👨‍💻 Contributors
 BTECH/10370/24	Sarthak Gaware
 BTECH/10383/24	Aman Kumar
+BTECH/10449/24	Aman Rathod
 BTECH/10046/24	Satyam Verma
 BTECH/10357/24	Suraj Kumar Singh
-BTECH/10449/24	Aman Rathod
+
 
 ---
 
@@ -36,12 +37,14 @@ This helps **reduce average waiting time**, improve traffic throughput, and demo
 5. **Rule-Based Signal Logic:**  
    Green signal duration is adjusted proportionally to lane density — **higher density = longer green time**.  
 
-6. **Dashboard Visualization:**  
-   A **Streamlit dashboard** shows:  
-   - Live video with vehicle bounding boxes  
-   - Lane-wise vehicle counts  
-   - Adaptive signal timing  
-   - Performance metrics (FPS, inference time)
+6. ## 🖥️ Dashboard Features
+- Upload video or use webcam feed
+- Live vehicle detection and counting
+- ROI (lane) management
+- Real-time metrics: FPS, vehicle counts, throughput
+- Optional robustness tests (dark/rain simulation)
+- Auto-saves ROI configuration for each video
+- Adaptive signal timing visualization
 
 ---
 

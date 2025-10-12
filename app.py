@@ -17,7 +17,6 @@ except Exception:
 # --- Streamlit Page Setup ---
 st.set_page_config(layout="wide", page_title="AI Traffic Signals")
 st.title("🚦 Smart Traffic Signals: Vehicle Density & Adaptive Timing")
-
 st.markdown(
     "Upload a traffic video or use live webcam, define lanes, detect vehicles, "
     "compute metrics, and display adaptive signal timing dynamically."
@@ -202,10 +201,11 @@ if st.button("Start Processing"):
 
         display_frame.image(cv2.cvtColor(frame,cv2.COLOR_BGR2RGB), channels="RGB")
 
+    # --- Video Processing Complete ---
     cap.release()
 
-    # --- Results & Metrics ---
-    st.subheader("Results & Metrics")
+    # --- Results & Metrics (After Video Stops) ---
+    st.subheader("📊 Processing Complete — Results & Counting Accuracy")
     throughput_vpm = total_detected_vehicles / (elapsed_global / 60.0)
     st.write(f"- Total frames processed: **{frame_idx}**")
     st.write(f"- Total detected vehicles: **{total_detected_vehicles}**")
@@ -213,14 +213,14 @@ if st.button("Start Processing"):
     st.write(f"- Avg inference per frame (ms): **{(np.mean(inference_times)*1000):.1f}**")
     st.write(f"- Avg FPS: **{current_fps:.2f}**")
 
-    # --- Evaluation against Ground Truth (if available) ---
+    # Counting Accuracy
     if gt_df is not None and not gt_df.empty:
         pred_df = pd.DataFrame({
             "frame_index": sampled_frame_indices,
             "pred_count": predicted_total_counts
         })
         merged_df = pd.merge(gt_df, pred_df, on="frame_index", how="inner")
-
+        
         if not merged_df.empty:
             merged_df["abs_error"] = (merged_df["pred_count"] - merged_df["total_count"]).abs()
             merged_df["pct_error"] = merged_df["abs_error"] / merged_df["total_count"].replace(0, 1) * 100
@@ -228,22 +228,25 @@ if st.button("Start Processing"):
             mae = merged_df["abs_error"].mean()
             mape = merged_df["pct_error"].mean()
 
+            st.markdown("### 🧮 Counting Accuracy")
             st.write(f"- MAE (Mean Absolute Error): **{mae:.2f} vehicles**")
             st.write(f"- MAPE (Mean Absolute Percentage Error): **{mape:.2f}%**")
 
-            with st.expander("📊 View Ground Truth Comparison Table"):
+            with st.expander("View Ground Truth Comparison Table"):
                 st.dataframe(merged_df.head(20))
         else:
             st.warning("No matching frames found between predictions and ground truth.")
+    else:
+        st.info("No ground truth CSV uploaded. MAE/MAPE cannot be computed.")
 
-    # --- Adaptive Green Summary ---
+    # Adaptive green summary
     if predicted_per_lane and lanes:
         avg_adaptive_green_per_frame=[]
         for pl in predicted_per_lane:
-            s=sum(pl)
-            greens=[max(min_green,int((c/s)*max_green)) if s>0 else min_green for c in pl]
+            s = sum(pl)
+            greens = [max(min_green, int((c/s)*max_green)) if s>0 else min_green for c in pl]
             avg_adaptive_green_per_frame.append(np.mean(greens))
-        avg_adaptive_green=float(np.mean(avg_adaptive_green_per_frame))
+        avg_adaptive_green = float(np.mean(avg_adaptive_green_per_frame))
         st.write(f"- Avg adaptive green (per-lane avg): **{avg_adaptive_green:.2f}s**")
 
     st.success("✅ Processing complete.")
