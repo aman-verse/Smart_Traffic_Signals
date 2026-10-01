@@ -1,19 +1,5 @@
 # 🚦 Smart Traffic Signals: Vehicle Density Estimation & Dynamic Timing  
 
-**Assigned to:** Group 4  
-**Institute:** Birla Institute of Technology, Mesra  
-
-
-👨‍💻 Contributors
-BTECH/10370/24	Sarthak Gaware
-BTECH/10383/24	Aman Kumar
-BTECH/10449/24	Aman Rathod
-BTECH/10046/24	Satyam Verma
-BTECH/10357/24	Suraj Kumar Singh
-
-
----
-
 ## 🎯 Objective  
 The project aims to **estimate real-time vehicle density** from a camera feed or recorded traffic video and **dynamically adjust traffic signal durations**.  
 This helps **reduce average waiting time**, improve traffic throughput, and demonstrate an **AI-based traffic management system**.
